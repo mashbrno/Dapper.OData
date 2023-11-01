@@ -1,4 +1,5 @@
 using Dapper.OData;
+using Dapper.OData.Oracle;
 using Dapper.OData.Sample.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +13,7 @@ using OData.Swagger.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
-    .AddDapperOData(GetEdmModel(), builder.Configuration.GetConnectionString("OracleConnection"), client: ClientType.OracleClient);
+    .AddDapperOData(GetEdmModel(), builder.Configuration.GetConnectionString("OracleConnection"));
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dapper.OData.Sample", Version = "v1" });

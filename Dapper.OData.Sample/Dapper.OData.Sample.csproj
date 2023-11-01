@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dapper.OData\Dapper.OData.csproj" />
+    <ProjectReference Include="..\Dapper.OData.Oracle\Dapper.OData.Oracle.csproj" />
   </ItemGroup>
 
 </Project>

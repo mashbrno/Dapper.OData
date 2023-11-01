@@ -1,11 +1,12 @@
 ﻿namespace Dapper.OData.Infrastructure
 {
-    internal interface IDbConfiguration
+    public interface IDbConfiguration
     {
         string ConnectionString { get; }
         int ConnectionTimeout { get; }
     }
-    internal class DbConfiguration : IDbConfiguration
+
+    public class DbConfiguration : IDbConfiguration
     {
 
         public DbConfiguration(string connectionString, int connectionTimeout)

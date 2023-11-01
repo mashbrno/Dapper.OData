@@ -7,7 +7,7 @@ namespace Dapper.OData;
 
 public static class Setup
 {
-    public static void AddDapperOData(this IMvcBuilder builder, IEdmModel edmModel, string conString, int connectionTimeout = 5, ClientType client = ClientType.SqlClient, bool matchNamesWithUnderscores = false)
+    public static void AddDapperODataBase(IMvcBuilder builder, IEdmModel edmModel, string conString, int connectionTimeout = 5, bool matchNamesWithUnderscores = false)
     {
         builder.AddOData(opt => opt
             .Filter()
@@ -19,30 +19,8 @@ public static class Setup
             .AddRouteComponents("odata", edmModel));
         builder.Services.AddSingleton<IDbConfiguration>(x => new DbConfiguration(conString, connectionTimeout));
         builder.Services.AddSingleton<ITryCatch, TryCatch>();
-        switch (client)
-        {
-            case ClientType.SqlClient:
-                builder.Services.AddTransient<IDbConnection, DbConnection>();
-                break;
-            case ClientType.OracleClient:
-                builder.Services.AddTransient<IDbConnection, Infrastructure.Oracle.DbConnection>();
-                break;
-        }
+        
         DefaultTypeMap.MatchNamesWithUnderscores = matchNamesWithUnderscores;
     }
 
-}
-/// <summary>
-/// Type of database client
-/// </summary>
-public enum ClientType
-{
-    /// <summary>
-    /// MS SQL Server Client
-    /// </summary>
-    SqlClient,
-    /// <summary>
-    /// Oracle Db Client
-    /// </summary>
-    OracleClient
 }

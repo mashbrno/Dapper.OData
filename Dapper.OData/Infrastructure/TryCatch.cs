@@ -1,51 +1,50 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 
-namespace Dapper.OData.Infrastructure
+namespace Dapper.OData.Infrastructure;
+
+public interface ITryCatch
 {
-    internal interface ITryCatch
+    T Try<T>(Func<T> tryAction, out bool isSuccessful, bool throwException = false, Func<T> catchAction = null, Action finallyAction = null);
+}
+
+public class TryCatch : ITryCatch
+{
+    //private readonly ILogger //_logger;
+
+    public TryCatch(/*ILogger logger*/)
     {
-        T Try<T>(Func<T> tryAction, out bool isSuccessful, bool throwException = false, Func<T> catchAction = null, Action finallyAction = null);
+        // //_logger = logger;
     }
-
-    internal class TryCatch : ITryCatch
+    public T Try<T>(Func<T> tryAction, out bool isSuccessful, bool throwException = false, Func<T> catchAction = null, Action finallyAction = null)
     {
-        //private readonly ILogger //_logger;
-
-        public TryCatch(/*ILogger logger*/)
+        try
         {
-           // //_logger = logger;
+            //_logger?.LogInformation("Invoking try Function");
+            var obj = tryAction.Invoke();
+            //_logger?.LogInformation("Invoke Successful");
+            isSuccessful = true;
+            //_logger?.LogInformation($"Returning object of type: {typeof(T).Name}");
+            return obj;
         }
-        public T Try<T>(Func<T> tryAction, out bool isSuccessful, bool throwException = false, Func<T> catchAction = null, Action finallyAction = null)
+        catch (Exception ex)
         {
-            try
+            //_logger?.LogError(ex.Message);
+            isSuccessful = false;
+            if (catchAction is not null)
             {
-                //_logger?.LogInformation("Invoking try Function");
-                var obj = tryAction.Invoke();
-                //_logger?.LogInformation("Invoke Successful");
-                isSuccessful = true;
-                //_logger?.LogInformation($"Returning object of type: {typeof(T).Name}");
-                return obj;
+                //_logger?.LogError("Invoking Catch Action");
+                return catchAction.Invoke();
             }
-            catch (Exception ex)
-            {
-                //_logger?.LogError(ex.Message);
-                isSuccessful = false;
-                if (catchAction is not null)
-                {
-                    //_logger?.LogError("Invoking Catch Action");
-                    return catchAction.Invoke();
-                }
 
-                if (throwException)
-                    throw;
-                else
-                    return Activator.CreateInstance<T>();
-            }
-            finally
-            {
-                finallyAction?.Invoke();
-            }
+            if (throwException)
+                throw;
+            else
+                return Activator.CreateInstance<T>();
+        }
+        finally
+        {
+            finallyAction?.Invoke();
         }
     }
 }
