@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dapper.OData\Dapper.OData.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Dapper.Oracle" Version="2.0.3" />
+        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" />
+    </ItemGroup>
+
+</Project>
